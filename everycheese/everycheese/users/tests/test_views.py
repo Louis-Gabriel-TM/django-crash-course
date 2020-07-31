@@ -1,8 +1,8 @@
-import pytest
-from django.test import RequestFactory
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.test import RequestFactory
 from django.urls import reverse
+import pytest
 
 from everycheese.users.models import User
 from everycheese.users.views import (
@@ -31,7 +31,7 @@ class TestUserUpdateView:
 
         view.request = request
 
-        assert view.get_success_url() == f"/users/{user.username}/"
+        assert view.get_success_url() == f"/utilisateurs/{user.username}/"
 
     def test_get_object(
         self, user: User, request_factory: RequestFactory
@@ -75,5 +75,5 @@ class TestUserRedirectView:
         view.request = request
 
         assert (
-            view.get_redirect_url() == f"/users/{user.username}/"
+            view.get_redirect_url() == f"/utilisateurs/{user.username}/"
         )
