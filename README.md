@@ -1,2 +1,3 @@
 # django-crash-course
-Training project EveryCheese from Django Crash Course - July 2020
+
+Training project _EveryCheese_ from _Django Crash Course_ - July 2020
