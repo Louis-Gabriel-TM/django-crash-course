@@ -22,3 +22,6 @@ class Cheese(TimeStampedModel):
         "fermeté", max_length=20,
         choices=Firmness.choices, default=Firmness.UNSPECIFIED,
     )
+
+    def __str__(self):
+        return self.name
