@@ -10,7 +10,7 @@ class Cheese(TimeStampedModel):
         SOFT = "pâte molle", "Pâte molle"
         SEMI_SOFT = "pâte demi-molle", "Pâte demi-molle"
         SEMI_HARD = "pâte demi-dure", "Pâte demi-dure"
-        HARD = "pâte dure"
+        HARD = "pâte dure", "Pâte dure"
 
     name = models.CharField("nom du fromage", max_length=255)
     slug = AutoSlugField(
