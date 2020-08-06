@@ -15,4 +15,11 @@
     {% endfor %}
   </ul>
 
+  <hr />
+
+  <p>Il manque un fromage à cette liste ?</p>
+  <a class="btn btn-primary" href="{% url 'cheeses:add' %}" role="button">
+    Créer un fromage
+  </a>
+
 {% endblock content %}

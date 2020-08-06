@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Créer un fromage{% endblock title %}
+
+{% block content %}
+
+  <h2>Créer un fromage</h2>
+
+  <form method="post" action="{% url 'cheeses:add' %}">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+  </form>
+
+{% endblock content %}
