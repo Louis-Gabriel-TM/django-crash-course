@@ -1,4 +1,5 @@
 from autoslug import AutoSlugField
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django_countries.fields import CountryField
@@ -27,6 +28,11 @@ class Cheese(TimeStampedModel):
         "Country of Origin", blank=True,
     )
     description = models.TextField("description", blank=True)
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
 
     def __str__(self):
         return self.name
