@@ -16,6 +16,10 @@ urlpatterns = [
         TemplateView.as_view(template_name="pages/about.html"),
         name="about",
     ),
+    path(
+        'les-fromages/',
+        include('everycheese.cheeses.urls', namespace='cheeses'),
+    ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
@@ -24,11 +28,6 @@ urlpatterns = [
         include("everycheese.users.urls", namespace="users"),
     ),
     path("comptes/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
-    path(
-        'les-fromages/',
-        include('everycheese.cheeses.urls', namespace='cheeses'),
-    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
