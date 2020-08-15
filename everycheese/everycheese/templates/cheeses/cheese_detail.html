@@ -7,6 +7,13 @@
 
   <h2>{{ cheese.name }}</h2>
 
+  <p>
+    <a class="btn btn-primary" href="{% url 'cheeses:update' cheese.slug %}"
+       role="button">
+      Modifier
+    </a>
+  </p>
+
   {% if cheese.firmness %}
     <p>Fermeté : {{ cheese.get_firmness_display }}</p>
   {% endif %}
