@@ -4,12 +4,13 @@ from django.urls import reverse
 import pytest
 from pytest_django.asserts import assertContains
 
-from .factories import CheeseFactory
+from .factories import CheeseFactory, cheese
 from ..models import Cheese
 from ..views import (
     CheeseCreateView,
     CheeseDetailView,
     CheeseListView,
+    CheeseUpdateView,
 )
 from everycheese.users.models import User
 
@@ -51,8 +52,7 @@ def test_cheese_list_contains_2_cheeses(rf):
     assertContains(response, cheese_1.name)
     assertContains(response, cheese_2.name)
 
-def test_good_cheese_detail_view(rf):
-    cheese = CheeseFactory()
+def test_good_cheese_detail_view(rf, cheese):
     url = reverse(
         'cheeses:detail', 
         kwargs={'slug': cheese.slug},
@@ -61,8 +61,17 @@ def test_good_cheese_detail_view(rf):
     response = CheeseDetailView.as_view()(request, slug=cheese.slug)
     #assertContains(response, cheese.name)
 
-def test_detail_contains_cheese_data(rf):
-    cheese = CheeseFactory()
+def test_good_cheese_update_voew(rf, admin_user, cheese):
+    url = reverse(
+        'cheeses:update',
+        kwargs={'slug': cheese.slug},
+    )
+    request = rf.get(url)
+    request.user = admin_user
+    response = CheeseUpdateView.as_view()(request, slug=cheese.slug)
+    assertContains(response, "Modifier un fromage")
+
+def test_detail_contains_cheese_data(rf, cheese):
     url = reverse(
         'cheeses:detail',
         kwargs={'slug': cheese.slug},
@@ -73,8 +82,7 @@ def test_detail_contains_cheese_data(rf):
     #assertContains(response, cheese.get_firmness_display())
     #assertContains(response, cheese.country_of_origin.name)
 
-def test_good_cheese_create_view(rf, admin_user):
-    cheese = CheeseFactory()
+def test_good_cheese_create_view(rf, admin_user, cheese):
     request = rf.get(reverse('cheeses:add'))
     request.user = admin_user  # add an authenticated user
     response = CheeseCreateView.as_view()(request)
@@ -93,3 +101,25 @@ def test_cheese_create_form_valid(rf, admin_user):
     assert cheese.description == "Un fromage dur salé"
     assert cheese.firmness == Cheese.Firmness.HARD
     assert cheese.creator == admin_user
+
+def test_cheese_create_correct_title(rf, admin_user):
+    request = rf.get(reverse('cheeses:add'))
+    request.user = admin_user
+    response = CheeseCreateView.as_view()(request)
+    assertContains(response, "Créer un fromage")
+
+def test_cheese_update(rf, admin_user, cheese):
+    form_data = {
+        'name': cheese.name,
+        'description': "Une nouvelle description",
+        'firmness': cheese.firmness,
+    }
+    url = reverse(
+        'cheeses:update',
+        kwargs={'slug': cheese.slug},
+    )
+    request = rf.post(url, form_data)
+    request.user = admin_user
+    response = CheeseUpdateView.as_view()(request, slug=cheese.slug)
+    cheese.refresh_from_db()
+    assert cheese.description == "Une nouvelle description"
